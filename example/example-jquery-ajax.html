@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>isExchange - jQuery Example</title>
+</head>
+<body>
+    <label for="from">From</label>
+    <input type="text" name="from" id="from" placeholder="USD"/><br/>
+    <label for="from">To</label>
+    <input type="text" name="to" id="to" placeholder="INR"/><br/>
+    <label for="from">Converted Rate</label>
+    <input type="text" id="result" name="result" value="" readonly /><br/>
+    <p id="error" style="color: #f2120a"></p>
+    <p id="success" style="color: #239c46"></p>
+    <button id="convert">Convert</button>
+</body>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script type="text/javascript">
+    
+    $('#convert').on('click', function(){    
+        
+        var from = $.trim($('#from').val());
+        var to = $.trim($('#to').val());
+        var url = 'http://ocode.in/exchanger.php?from='+from+'&to='+to;
+        
+        if(from != '' && to != '') {
+            $.ajax({
+                dataType: "json",
+                url: url,
+                success: function(response) {
+                    $('#error').html('');
+                    if(response.status == 'success') {
+                        $('#result').val(response.rate);
+                        $('#success').html('Converted');
+                    } else {
+                        $('#error').html(response.message);
+                    }
+                }
+            });
+        } else {
+            $('#error').html("Both 'from' and 'to' fields are required.");
+        }
+    });
+</script>
+</html>
